@@ -67,7 +67,11 @@ labels, features = targetFeatureSplit(data)
 
 ## DecisionTree
 from sklearn import tree
-clf = tree.DecisionTreeClassifier()
+clf = tree.DecisionTreeClassifier(class_weight=None, criterion='gini', max_depth=None,
+            max_features=None, max_leaf_nodes=None,
+            min_impurity_split=1e-07, min_samples_leaf=1,
+            min_samples_split=2, min_weight_fraction_leaf=0.0,
+            presort=False, random_state=None, splitter='best')
 clf.fit(features, labels)
 
 
@@ -84,7 +88,12 @@ features_train, features_test, labels_train, labels_test = \
     train_test_split(features, labels, test_size=0.3, random_state=42)
 
 
-
+from sklearn.grid_search import GridSearchCV
+param_grid = {'criterion': ['gini', 'entropy'],
+              'min_samples_split': [2, 4, 6, 8],
+              'max_features': [2, 3, 4],
+              'max_depth': [3, 4, 5, None],
+              'n_estimators': [5, 10, 15, 20]}
 
 
 # from sklearn.model_selection import KFold
