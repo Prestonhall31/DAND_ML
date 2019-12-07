@@ -106,6 +106,12 @@ DecisionTreeClassifier(class_weight=None, criterion='gini', max_depth=None,
 
 ```
 
+Accuracy: 0.76238       
+Precision: 0.22034      
+Recall: 0.21450 
+
+
+
 ## 5. Validation
 > What is validation, and what’s a classic mistake you can make if you do it wrong? How did you validate your analysis?
 
