@@ -93,29 +93,37 @@ Tuning is essentially selecting the best parameters for an algorithm to optimize
 
 It is possible to overfit the data which can lower our accuracy and precision so it is important to not overfit the data. 
 
-I decided to use SKLearn's GridSearchCV to determine the best parameters to use for my algorithm. 
-
-After running GridSearchCV for the Decision tree classifyer, it returned this result: 
+After trying many different parameters, the best collection that I could find were these:
 
 ```
-DecisionTreeClassifier(class_weight=None, criterion='gini', max_depth=None,
-            max_features=None, max_leaf_nodes=None,
+clf = tree.DecisionTreeClassifier(class_weight=None, criterion='gini', max_depth=5,
+            max_features=4, max_leaf_nodes=None,
             min_impurity_split=1e-07, min_samples_leaf=1,
-            min_samples_split=2, min_weight_fraction_leaf=0.0,
+            min_samples_split=5, min_weight_fraction_leaf=0.0,
             presort=False, random_state=None, splitter='best')
 
 ```
 
-Accuracy: 0.76238       
-Precision: 0.22034      
-Recall: 0.21450 
+```
+Accuracy: 0.77800             
+Precision: 0.26831       
+Recall: 0.25650
+```
 
+I'm sure that if I cleaned up the data more or chose different features, I may be able to increase the scores of the data. 
 
 
 ## 5. Validation
 > What is validation, and what’s a classic mistake you can make if you do it wrong? How did you validate your analysis?
 
 
+Validation is the process of retaining a sample of the data set and using it to test the machine learning algorithm once it has been tuned and trained. The validation process helps prevent overfitting the algorithm and thus decrease the accuracy of our results. 
+
+
+
+With small data sets such as the Enron set, the data sampling process that creates the training, test and validation sets can have a significant impact on the classifier’s performance – for example, if the distribution of data in the training set does not reflect that of the wider set. To overcome this, I used a cross-validation function, which randomly splits the data into k samples and trains the classifier on each of the k-1 samples, before validating it on the remaining data. The classifier’s performance is thus averaged across each of the samples.
+
+The specific function I used (StratifiedShuffleSplit) has the additional benefit of stratifying each random sample, such that the distribution of classes (i.e. POI and non-POI) in each sample reflects that of the larger data set. This is important, particularly in such a small and unevenly distributed data set, because otherwise there is no guarantee that each sample being used to train the classifier actually contains POI data for it to learn from.
 
 
 ## 6. Evaluation
