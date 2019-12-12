@@ -97,17 +97,6 @@ clf.fit(features, labels)
 
 
 
-# from sklearn.model_selection import KFold
-# kf = KFold(n_splits = 4, shuffle = True, )
-#
-# for train_indices, test_indices in kf.split(labels):
-#     # make training and testing dataset
-#     kfeatures_train = [features[ii] for ii in train_indices]
-#     kfeatures_test = [features[ii] for ii in test_indices]
-#     klabels_train = [labels[ii] for ii in train_indices]
-#     klabels_test = [labels[ii] for ii in test_indices]
-
-
 ### Task 6: Dump your classifier, dataset, and features_list so anyone can
 ### check your results. You do not need to change anything below, but make sure
 ### that the version of poi_id.py that you submit can be run on its own and

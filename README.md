@@ -9,7 +9,7 @@ November 2019
 The goal of this project is to train a supervised maching learning algorithm using data obtained from the Enron Scandal. This data set contains financial information and email data from various employees in the former company. Enron was an energy commodities and services corporation that went bankrupt in 2001 due to fraud. You can learn more about the scandal here. This ML project will attempt to classify whether an Enron employee was a person of interest (POI).
 
 
-## Data Exploration
+#### Data Exploration
 
 I converted the dataset to a pandas dataframe for easier manipulation and cleaning. Using `df.info()` I could set that there were 146 rows(names) and 21 columns(attributes). Since this was a low enough amount, I printed the names and reviewed for anything that might stick out to me. The rows, 'TOTAL' and 'THE TRAVEL AGENCY IN THE PARK' stuck out particularly as these are not people. I decided to remove them from the dataset. 
 
@@ -117,15 +117,37 @@ I'm sure that if I cleaned up the data more or chose different features, I may b
 > What is validation, and what’s a classic mistake you can make if you do it wrong? How did you validate your analysis?
 
 
-Validation is the process of retaining a sample of the data set and using it to test the machine learning algorithm once it has been tuned and trained. The validation process helps prevent overfitting the algorithm and thus decrease the accuracy of our results. 
+Validation is the process of retaining a sample of the data set and using it to test the machine learning algorithm once it has been tuned and trained. The validation process helps prevent overfitting the algorithm and thus decrease the accuracy of our results. I validated my data by splitting the data set using train_test_split with a test size of 30%.
 
 
-
-With small data sets such as the Enron set, the data sampling process that creates the training, test and validation sets can have a significant impact on the classifier’s performance – for example, if the distribution of data in the training set does not reflect that of the wider set. To overcome this, I used a cross-validation function, which randomly splits the data into k samples and trains the classifier on each of the k-1 samples, before validating it on the remaining data. The classifier’s performance is thus averaged across each of the samples.
-
-The specific function I used (StratifiedShuffleSplit) has the additional benefit of stratifying each random sample, such that the distribution of classes (i.e. POI and non-POI) in each sample reflects that of the larger data set. This is important, particularly in such a small and unevenly distributed data set, because otherwise there is no guarantee that each sample being used to train the classifier actually contains POI data for it to learn from.
 
 
 ## 6. Evaluation
 
 > Give at least 2 evaluation metrics and your average performance for each of them. Explain an interpretation of your metrics that says something human-understandable about your algorithm’s performance.
+
+
+The three evaluation metrics I primarily used are accuracy, precision, and recall. My average performace for those metrics with and Naive Bayes algorithms are the following:
+
+|    |  Naive Bayes | Decision Tree |
+| --- | --- | --- |
+| Accuracy | 0.82254  | 0.77800  |
+|  Precision | 0.38570 | 0.26831   |
+| Recall | 0.25900  | 0.25650 |
+
+Accuracy is one metric for evaluating classification models. Informally, accuracy is the fraction of predictions our model got right. Precision is the fraction of relevant instances amonf the retreived instances, while recall is the fraction of the total amount of relevant instances that were actually retrieved. The score for these 3 metrics are a value between 0 and 1 with 1 being the highest. 
+
+As you can see by my results, the Naive Bayes algorithm returned better results than Decision Tree but not by much. With some more tuning and selecting different features, I may be able to improve on these scores. 
+
+## Conclusion
+
+
+This was a great introductory project into Machine Learning algorithms as it allows the exploration of the different processes and methods available and to compare the results to see which method may be more efficient. With the right combonation of features, algorithms and their parameters, we are able to predict the fraudsters at Enron using the data provided. 
+
+
+### Resources
+
+Sklearn https://scikit-learn.org/stable
+
+Udacity https://classroom.udacity.com
+
