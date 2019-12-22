@@ -162,7 +162,19 @@ clf = tree.DecisionTreeClassifier(class_weight=None, criterion='gini', max_depth
 Precision: 0.32216      
 Recall: 0.24500
 
-The accuracy stayed the same but the Precision and Recall scores dropped significantly. I feel I may be overfitting the data. I will use the features set of parameters in my final algorithm. 
+The accuracy stayed the same but the Precision and Recall scores dropped significantly. I feel I may be overfitting the data. I removed the additional parameters and decreased max_features and min_samples_split and changed the criterion to 'entropy' to see if that will help my scores. 
+
+```python
+clf = DecisionTreeClassifier(max_features=2, min_samples_split=2,
+                             criterion='entropy', max_depth=None)
+
+```
+
+> Accuracy: 0.80515            
+Precision: 0.36298      
+Recall: 0.35300
+
+This returned the best overal scores. I will use these features set of parameters in my final algorithm. 
 
 
 ## 5. Validation
@@ -185,8 +197,8 @@ I ran each classifer against the `tester.py` script which returns the Accracy, p
 | Classifier | Accuracy | Precision | Recall | 
 | --- | --- | --- | --- |
 | GaussianNB |  0.83731  | 0.46254 | 0.35500 |
-| DecisionTreeClassifier |  0.80815  | 0.36045   | 0.31900 |
-| RandomForestClassifier  | 0.893 | 0.52193 | 0.23800 |
+| DecisionTreeClassifier |  0.80515  | 0.36298   | 0.35300 |
+| RandomForestClassifier  | 0.89300 | 0.52193 | 0.23800 |
 
 **Accuracy:** Is the number of correct predictions divided by the total number of predictions.
 

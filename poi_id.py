@@ -167,15 +167,13 @@ from sklearn.ensemble import RandomForestClassifier
 
 
 # 2nd test with DT
-# from sklearn.tree import DecisionTreeClassifier
-# clf = DecisionTreeClassifier(max_features=2, min_samples_split=2,
-#                              criterion='entropy', max_depth=None)
+# clf = DecisionTreeClassifier(max_features=3, min_samples_split=3,
+#                              criterion='gini', max_depth=None)
 
 
 # 3rd test with DT
-clf = DecisionTreeClassifier(max_features=3, min_samples_split=3,
-                             criterion='gini', max_depth=None)
-
+clf = DecisionTreeClassifier(max_features=2, min_samples_split=2,
+                             criterion='entropy', max_depth=None)
 
 
 ### Task 6: Dump your classifier, dataset, and features_list so anyone can
