@@ -2,16 +2,42 @@
 Preston Hall 
 November 2019
 
-## 1. Introduction 
-
-> Summarize for us the goal of this project and how machine learning is useful in trying to accomplish it. As part of your answer, give some background on the dataset and how it can be used to answer the project question. Were there any outliers in the data when you got it, and how did you handle those?**
-
-The goal of this project is to train a supervised maching learning algorithm using data obtained from the Enron Scandal. This data set contains financial information and email data from various employees in the former company. Enron was an energy commodities and services corporation that went bankrupt in 2001 due to fraud. You can learn more about the scandal here. This ML project will attempt to classify whether an Enron employee was a person of interest (POI).
 
 
-#### Data Exploration
+The goal of this project is to train a supervised maching learning algorithm using data obtained from the Enron Scandal data set. This data set contains financial information and email data from various employees in the former company. Enron was an energy commodities and services corporation that went bankrupt in 2001 due to fraud. You can learn more about the scandal here. 
 
-I converted the dataset to a pandas dataframe for easier manipulation and cleaning. Using `df.info()` I could set that there were 146 rows(names) and 21 columns(attributes). Since this was a low enough amount, I printed the names and reviewed for anything that might stick out to me. The rows, 'TOTAL' and 'THE TRAVEL AGENCY IN THE PARK' stuck out particularly as these are not people. I decided to remove them from the dataset. 
+### 1. Data Exploration
+>Summarize for us the goal of this project and how machine learning is useful in trying to accomplish it. As part of your answer, give some background on the dataset and how it can be used to answer the project question. Were there any outliers in the data when you got it, and how did you handle those?
+
+
+This dataset was provided in a pickle file, which I then extracted using Python's Pickle package. I converted the dataset to a pandas dataframe for easier manipulation and data cleaning. 
+
+Using pandas `.info()` method I could set that there were 146 rows(names) and 21 columns(attributes). The attributes included:  
+>salary  
+to_messages  
+deferral_payments  
+total_payments  
+exercised_stock_options  
+bonus  
+restricted_stock  
+shared_receipt_with_poi  
+restricted_stock_deferred  
+total_stock_value  
+expenses  
+loan_advances  
+from_messages  
+other  
+from_this_person_to_poi  
+poi  
+director_fees  
+deferred_income  
+long_term_incentive  
+email_address  
+from_poi_to_this_person  
+
+The 'poi' attribute is a boolean value that tells us whether this individual was involved in the Enron scandal. Using machine learning algorithms, we can spot patterns across multiple variables that enable more accurate classification. 
+
+Since this was a low enough amount, I chose to print the names and review for anything data that might look out of place. The rows, 'TOTAL' and 'THE TRAVEL AGENCY IN THE PARK' are not individuals so I decided to remove them from the dataset.
 
 Missing data can make it difficult to have accurate results when running algorithms. I checked which rows had mostly null values and removed all rows with more than 85% null values, which turned out to be: 
 
@@ -36,6 +62,8 @@ Since 'total_payments' and 'total_stock_value' are both ways to compensate an in
 
 After adding 'total_compensation' to my features_list, I ran the data using SKLearns SelectKBest algorithm to return the best features. SelectKBest retains the first k features of X with the highest scores.  The f_classif argument I decided to keep the 4 best features to use in my analysis. 
 
+I was having a difficult time getting a good Precision and Recall score based on the features that I had so I went back a created a few more to see if I can increase the score. I created `'from_poi_rate'` and `'to_poi_rate'`. After running some tests, the scores increased quite a bit so I decided to add them into my analysis. 
+
 SelectKBest returned the following features and their f-scores. 
 
 | Feature_names  |  F_Scores |
@@ -43,7 +71,9 @@ SelectKBest returned the following features and their f-scores.
 | exercised_stock_options | 15.967730 |
 |  total_stock_value | 15.450997 |
 | from_poi_to_this_person |  15.290707 |
+| from_poi_rate | 13.270682 |
 |  bonus |  13.159868 |
+
 
 I can see that the feature I created, `'total_compensation'`, did not make the cut so I will not be using it in my analysis. 
 
@@ -52,24 +82,32 @@ I can see that the feature I created, `'total_compensation'`, did not make the c
 
 > What algorithm did you end up using? What other one(s) did you try? How did model performance differ between algorithms?
 
+I reviewed the documentation on using Pipelines and learned that I can run many algorithms with a few lines of code and see what the output would be on the default values. I started off with running 6 different classifiers to see what the model score wouled return. 
 
-I tried 2 algorithms to see which ones would have the best effect on this dataset. I used Gaussian Naive Bayes and Decision Tree with only the default arguments to see what the results would be. Neither of these algorithms require feature scaling, so I used the original data values.
+I used several classifiers to see what results would be returned using only the default parameters. 
 
-```
-GaussianNB: 
-    Accuracy: 0.82254 
-    Precision: 0.38570
-    Recall: 0.25900
 
-DecisionTree: 
-    Accuracy: 0.76262
-    Precision: 0.22154
-    Recall: 0.21600
+| Classifier | Accuracy | Precision | Recall | 
+| --- | --- | --- | --- |
+| GaussianNB |  0.83731  | 0.46254 | 0.35500 |
+| DecisionTreeClassifier |  0.79292 | 0.33253 | 0.34350
+| RandomForestClassifier  | 0.893 | 0.52193 | 0.23800 |
 
-RF: Accuracy: 0.84429, Precision: 0.40405, Recall: 0.18950
-```
 
-GaussianNB provided higher accuracy upfront but I decided to work with Decision Tree to see if I can get the score higher, as there are more optional arguments to work with which I will explain in the next section.
+GaussianNB(priors=None)
+        Accuracy: 0.83731       Precision: 0.46254      Recall: 0.35500 F1: 0.40170     F2: 0.37231
+        Total predictions: 13000        True positives:  710    False positives:  825   False negatives: 1290   True negatives: 10175
+
+
+
+>**Gaussian Naive Bayes:** A Gaussian Naive Bayes algorithm is a special type of NB algorithm. It's specifically used when the features have continuous values. It's also assumed that all the features are following a gaussian distribution i.e, normal distribution.  
+<br>
+**Decision Tree:** A decision tree is a decision support tool that uses a tree-like model of decisions and their possible consequences, including chance event outcomes, resource costs, and utility. It is one way to display an algorithm that only contains conditional control statements.  
+<br>
+**Random Forest:** Random forests or random decision forests are an ensemble learning method for classification, regression and other tasks that operates by constructing a multitude of decision trees at training time and outputting the class that is the mode of the classes or mean prediction of the individual trees.  
+ 
+
+I decided to use DecisionTreeClassifier in my analysis as it returned really great scores using the default parameters and it allows for multiple varaiations in the parameters to try to improve the scores. 
 
 ## 4. Tuning
 
@@ -95,7 +133,23 @@ It is possible to overfit the data which can lower our accuracy and precision so
 
 After trying many different parameters, the best collection that I could find were these:
 
+The first set of parameters I attempted were:
+
+```python
+clf = DecisionTreeClassifier(max_features=3, min_samples_split=3,
+                             criterion='gini', max_depth=None)
 ```
+
+Which returned: 
+
+> Accuracy: 0.80815            
+Precision: 0.36045       
+Recall: 0.31900
+
+This is already an improvement over the default parameters. I want to see if I can improve the scores even more. 
+
+
+```python
 clf = tree.DecisionTreeClassifier(class_weight=None, criterion='gini', max_depth=5,
             max_features=4, max_leaf_nodes=None,
             min_impurity_split=1e-07, min_samples_leaf=1,
@@ -104,40 +158,45 @@ clf = tree.DecisionTreeClassifier(class_weight=None, criterion='gini', max_depth
 
 ```
 
-```
-Accuracy: 0.77800             
-Precision: 0.26831       
-Recall: 0.25650
-```
+> Accuracy: 0.80454            
+Precision: 0.32216      
+Recall: 0.24500
 
-I'm sure that if I cleaned up the data more or chose different features, I may be able to increase the scores of the data. 
+The accuracy stayed the same but the Precision and Recall scores dropped significantly. I feel I may be overfitting the data. I will use the features set of parameters in my final algorithm. 
 
 
 ## 5. Validation
 > What is validation, and what’s a classic mistake you can make if you do it wrong? How did you validate your analysis?
 
 
-Validation is the process of retaining a sample of the data set and using it to test the machine learning algorithm once it has been tuned and trained. The validation process helps prevent overfitting the algorithm and thus decrease the accuracy of our results. I validated my data by splitting the data set using train_test_split with a test size of 30%.
+Validation is the process of retaining a sample of the data set and using it to test the machine learning algorithm once it has been tuned and trained. The validation process helps prevent overfitting the algorithm and thus decrease the accuracy of our results. 
 
+Working with small data sets such as this, the data sampling process that creates the training and testing sets can have a siginficant import on the performance. To help prevent decrease in performance, I used SkLearn's train_test_split function. The train_test_split function will split the arrays or matrices into random train and test subsets. 
 
+I validated my data by splitting the data set using train_test_split with a test size of 30%.
 
 
 ## 6. Evaluation
 
 > Give at least 2 evaluation metrics and your average performance for each of them. Explain an interpretation of your metrics that says something human-understandable about your algorithm’s performance.
 
+I ran each classifer against the `tester.py` script which returns the Accracy, precision, recall and F scores. The three evaluation metrics I focused on were accuracy, precision, and recall. My average performace for those metrics with Naive Bayes Decision Tree and Random Forest algorithms are the following:
 
-The three evaluation metrics I primarily used are accuracy, precision, and recall. My average performace for those metrics with and Naive Bayes algorithms are the following:
+| Classifier | Accuracy | Precision | Recall | 
+| --- | --- | --- | --- |
+| GaussianNB |  0.83731  | 0.46254 | 0.35500 |
+| DecisionTreeClassifier |  0.80815  | 0.36045   | 0.31900 |
+| RandomForestClassifier  | 0.893 | 0.52193 | 0.23800 |
 
-|    |  Naive Bayes | Decision Tree |
-| --- | --- | --- |
-| Accuracy | 0.82254  | 0.77800  |
-|  Precision | 0.38570 | 0.26831   |
-| Recall | 0.25900  | 0.25650 |
+**Accuracy:** Is the number of correct predictions divided by the total number of predictions.
 
-Accuracy is one metric for evaluating classification models. Informally, accuracy is the fraction of predictions our model got right. Precision is the fraction of relevant instances amonf the retreived instances, while recall is the fraction of the total amount of relevant instances that were actually retrieved. The score for these 3 metrics are a value between 0 and 1 with 1 being the highest. 
+**Precision:** Is the fraction of relevant instances among the retrieved instances.
 
-As you can see by my results, the Naive Bayes algorithm returned better results than Decision Tree but not by much. With some more tuning and selecting different features, I may be able to improve on these scores. 
+**Recall:** Is the fraction of the total amount of relevant instances that were actually retrieved. 
+
+Each metric returns a score between 0 and 1 with 1 being the highest. 
+
+As you can see by the results table, GaussianNB returned the best overall scores though I used Decision Tree in my algorithm as it would allow me to adjust the parameters. 
 
 ## Conclusion
 
@@ -147,7 +206,15 @@ This was a great introductory project into Machine Learning algorithms as it all
 
 ### Resources
 
-Sklearn https://scikit-learn.org/stable
+Sklearn package library [https://scikit-learn.org/stable]
 
-Udacity https://classroom.udacity.com
+Udacity [https://classroom.udacity.com]
+
+Quora [quora.com/How-do-I-properly-use-SelectKBest-GridSearchCV-and-cross-validation-in-the-sklearn-package-together]
+
+Using pipelines [https://medium.com/vickdata/a-simple-guide-to-scikit-learn-pipelines-4ac0d974bdcf]
+
+Accuracy [https://developers.google.com/machine-learning/crash-course/classification/accuracy]
+
+Precision and Recall [https://en.wikipedia.org/wiki/Precision_and_recall]
 
