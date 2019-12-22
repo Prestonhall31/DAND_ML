@@ -7,10 +7,8 @@ aS'total_stock_value'
 p3
 aS'from_poi_to_this_person'
 p4
-aS'bonus'
+aS'from_poi_rate'
 p5
-aS'salary'
+aS'bonus'
 p6
-aS'total_compensation'
-p7
 a.
